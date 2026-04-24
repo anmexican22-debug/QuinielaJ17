@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Quiniela J17 — Clausura 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500;600;700&family=Barlow+Condensed:wght@400;600;700;900&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#f5c842;--gold2:#e6a817;--gold3:#fde68a;
+  --dark:#09090a;--dark2:#111114;--dark3:#1a1a1f;
+  --red:#e63946;--green:#2dc653;--blue:#4a90d9;
+  --text:#f0ead6;--muted:#6b6452;
+}
+body{background:var(--dark);font-family:'Barlow Condensed',sans-serif;color:var(--text);min-height:100vh;overflow-x:hidden}
+
+/* ANIMATED BG */
+.bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.bg-star{position:absolute;width:1px;height:1px;background:var(--gold);border-radius:50%;opacity:0;animation:twinkle var(--d,3s) var(--delay,0s) infinite}
+@keyframes twinkle{0%,100%{opacity:0;transform:scale(1)}50%{opacity:.6;transform:scale(2)}}
+.bg-glow{position:absolute;border-radius:50%;filter:blur(80px);opacity:.07;animation:drift 8s ease-in-out infinite alternate}
+.bg-glow-1{width:500px;height:500px;background:var(--gold);top:-100px;left:-100px}
+.bg-glow-2{width:400px;height:400px;background:#c84b4b;bottom:-50px;right:-50px;animation-delay:-4s}
+@keyframes drift{from{transform:translate(0,0)}to{transform:translate(30px,20px)}}
+
+.wrap{position:relative;z-index:1;max-width:520px;margin:0 auto;padding:20px 14px 70px}
+
+/* HEADER */
+.header{text-align:center;padding:28px 18px 22px;position:relative;margin-bottom:22px;overflow:hidden}
+.header::before{content:'';position:absolute;inset:0;
+  background:linear-gradient(160deg,#1a1508 0%,#0f0c04 50%,#0a0a0d 100%);
+  border:1px solid #2e2510;border-radius:18px;z-index:0}
+.header::after{content:'';position:absolute;bottom:0;left:10%;right:10%;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);z-index:1}
+.header>*{position:relative;z-index:1}
+.badge-row{display:flex;justify-content:center;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.badge{font-size:10px;font-weight:700;letter-spacing:2px;padding:3px 12px;border-radius:2px;text-transform:uppercase}
+.badge-gold{background:var(--gold);color:#000}
+.badge-red{background:var(--red);color:#fff}
+.crown{font-size:36px;display:block;margin-bottom:4px;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.header h1{font-family:'Bebas Neue',sans-serif;font-size:52px;letter-spacing:6px;
+  background:linear-gradient(135deg,var(--gold3),var(--gold),var(--gold2),var(--gold));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  line-height:.95;margin-bottom:4px}
+.header-sub{font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:3px;color:var(--muted);font-weight:400;margin-bottom:6px}
+.header-dates{font-size:12px;color:var(--gold2);font-weight:600;letter-spacing:1px}
+.stakes-bar{display:flex;justify-content:center;gap:6px;margin-top:10px;flex-wrap:wrap}
+.stake{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;letter-spacing:.5px}
+.stake-liguilla{background:#1a2a10;color:var(--green);border:1px solid #2dc65344}
+.stake-ultimo{background:#2a1010;color:var(--red);border:1px solid #e6394644}
+.stake-millon{background:#1a1500;color:var(--gold);border:1px solid var(--gold2)44}
+
+/* PROGRESS */
+.prog-wrap{margin-bottom:14px}
+.prog-track{height:4px;background:#1e1c14;border-radius:2px;overflow:hidden;margin-bottom:5px}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--gold2),var(--gold));border-radius:2px;width:0%;transition:width .4s cubic-bezier(.4,0,.2,1)}
+.prog-lbl{font-size:11px;color:var(--muted);text-align:right;letter-spacing:.5px;font-weight:600}
+
+/* NAME */
+.name-sec{margin-bottom:14px}
+.lbl{display:block;font-size:11px;font-weight:700;letter-spacing:2px;color:var(--muted);margin-bottom:6px;text-transform:uppercase}
+.name-inp{width:100%;padding:11px 14px;background:#13120c;border:1px solid #2e2a18;border-radius:8px;
+  color:var(--text);font-size:15px;font-family:'Barlow Condensed',sans-serif;font-weight:600;outline:none;transition:border-color .2s}
+.name-inp:focus{border-color:var(--gold2)}
+.name-inp::placeholder{color:#2e2a18}
+
+/* LEGEND */
+.legend{display:flex;gap:7px;justify-content:center;margin-bottom:12px}
+.leg{font-size:11px;font-weight:700;padding:4px 10px;border-radius:3px;letter-spacing:.5px}
+.leg-l{background:#051a0a;color:var(--green);border:1px solid #2dc65330}
+.leg-e{background:#1a1500;color:var(--gold);border:1px solid var(--gold)30}
+.leg-v{background:#04101e;color:var(--blue);border:1px solid var(--blue)30}
+
+/* DAY SEPARATOR */
+.day-sep{display:flex;align-items:center;gap:10px;margin:20px 0 10px}
+.day-label{font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:3px;color:var(--gold2);white-space:nowrap}
+.day-line{flex:1;height:1px;background:#2e2a18}
+
+/* MATCH CARDS */
+.matches{display:flex;flex-direction:column;gap:9px}
+.card{background:var(--dark2);border:1px solid #222018;border-left:4px solid #222018;
+  border-radius:12px;padding:12px 13px;transition:all .25s cubic-bezier(.4,0,.2,1);
+  position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;right:0;width:60px;height:60px;
+  border-radius:50%;filter:blur(20px);opacity:0;transition:opacity .3s;pointer-events:none}
+.card.pL{border-left-color:var(--green);box-shadow:0 0 16px #2dc65318}
+.card.pL::before{background:var(--green);opacity:.15}
+.card.pE{border-left-color:var(--gold);box-shadow:0 0 16px #f5c84218}
+.card.pE::before{background:var(--gold);opacity:.12}
+.card.pV{border-left-color:var(--blue);box-shadow:0 0 16px #4a90d918}
+.card.pV::before{background:var(--blue);opacity:.15}
+
+/* CARD BADGES */
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:9px;gap:6px}
+.card-tags{display:flex;gap:4px;flex-wrap:wrap;flex:1}
+.ctag{font-size:9px;font-weight:800;padding:2px 7px;border-radius:2px;letter-spacing:1px;text-transform:uppercase}
+.ctag-liguilla{background:#0d2a08;color:var(--green)}
+.ctag-ultimo{background:#2a0808;color:#f87171}
+.ctag-millon{background:#1a1200;color:var(--gold)}
+.ctag-libre{background:#111116;color:#444}
+.card-time{font-size:11px;color:var(--muted);font-weight:700;background:#0f0e0a;padding:2px 7px;border-radius:4px;white-space:nowrap}
+
+/* TEAMS */
+.teams{display:flex;align-items:center;gap:6px;margin-bottom:10px}
+.team{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px}
+.shield{width:44px;height:44px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:22px;position:relative;overflow:hidden;flex-shrink:0}
+.team-name{font-family:'Oswald',sans-serif;font-size:12px;font-weight:600;color:var(--text);text-align:center;line-height:1.1;letter-spacing:.5px}
+.team-pts{font-size:10px;color:var(--muted);font-weight:600;text-align:center}
+.vs-col{display:flex;flex-direction:column;align-items:center;gap:3px;flex-shrink:0;min-width:36px}
+.vs-txt{font-family:'Bebas Neue',sans-serif;font-size:18px;color:#2e2a18;letter-spacing:2px}
+.vs-note{font-size:8px;color:var(--red);font-weight:800;text-align:center;max-width:44px;line-height:1.2;letter-spacing:.3px}
+
+/* PICK BUTTONS */
+.picks{display:flex;gap:6px}
+.pbtn{flex:1;padding:9px 4px;background:#0f0e0a;border:1px solid #222018;border-radius:7px;
+  color:#2e2a18;font-size:12px;font-weight:800;font-family:'Barlow Condensed',sans-serif;
+  letter-spacing:.5px;cursor:pointer;transition:all .15s}
+.pbtn:hover{background:var(--dark3);color:#4a4030}
+.pbtn.aL{background:#041308;border-color:var(--green);color:var(--green)}
+.pbtn.aE{background:#130f00;border-color:var(--gold);color:var(--gold)}
+.pbtn.aV{background:#030d1c;border-color:var(--blue);color:var(--blue)}
+
+/* SUBMIT */
+.sub-wrap{text-align:center;margin:24px 0}
+.sub-hint{font-size:12px;color:var(--gold2);margin-bottom:10px;font-weight:600;letter-spacing:.5px}
+.sub-btn{width:100%;padding:16px;
+  background:linear-gradient(135deg,#8a6800,#c49a00,var(--gold),var(--gold2));
+  border:none;border-radius:10px;color:#000;font-size:16px;font-weight:900;
+  font-family:'Bebas Neue',sans-serif;letter-spacing:3px;cursor:pointer;transition:all .2s;
+  box-shadow:0 4px 20px #f5c84230}
+.sub-btn:disabled{opacity:.2;cursor:not-allowed;box-shadow:none}
+.sub-btn:not(:disabled):hover{transform:translateY(-2px);box-shadow:0 6px 30px #f5c84250}
+.footer{text-align:center;font-size:10px;color:#2e2a18;letter-spacing:2px;font-weight:700;margin-top:10px}
+
+/* SUCCESS */
+#suc{display:none;animation:fadeUp .4s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.suc-card{background:var(--dark2);border:1px solid #2e2a18;border-radius:18px;padding:32px 20px;text-align:center;margin-bottom:18px;position:relative;overflow:hidden}
+.suc-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.trophy-big{font-size:60px;display:block;margin-bottom:8px;animation:float 2s ease-in-out infinite}
+.suc-title{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:4px;
+  background:linear-gradient(135deg,var(--gold3),var(--gold));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:2px}
+.suc-sub{font-size:14px;color:var(--muted);margin-bottom:24px;font-weight:600;font-family:'Oswald',sans-serif;letter-spacing:1px}
+.res-grid{display:flex;flex-direction:column;gap:5px;margin-bottom:24px;text-align:left}
+.res-row{display:flex;justify-content:space-between;align-items:center;
+  background:#0f0e0a;padding:8px 12px;border-radius:6px}
+.res-left{display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.res-num{font-size:10px;color:var(--muted);font-weight:700;width:16px;flex-shrink:0}
+.res-teams{font-size:12px;color:var(--text);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:'Oswald',sans-serif;letter-spacing:.3px}
+.res-pick{font-size:10px;font-weight:800;padding:3px 10px;border-radius:3px;flex-shrink:0;letter-spacing:.5px}
+.rpL{background:var(--green);color:#000}.rpE{background:var(--gold);color:#000}.rpV{background:var(--blue);color:#000}
+.rst-btn{padding:10px 26px;background:transparent;border:1px solid #2e2a18;border-radius:8px;
+  color:var(--muted);font-size:13px;font-weight:700;font-family:'Barlow Condensed',sans-serif;cursor:pointer;
+  transition:all .2s;letter-spacing:1px}
+.rst-btn:hover{border-color:var(--gold2);color:var(--gold2)}
+</style>
+</head>
+<body>
+
+<div class="bg" id="bgc"></div>
+
+<div class="wrap">
+<div id="frm">
+
+  <div class="header">
+    <div class="badge-row">
+      <span class="badge badge-gold">⚽ Liga BBVA MX</span>
+      <span class="badge badge-red">🏁 Última Jornada</span>
+    </div>
+    <span class="crown">👑</span>
+    <h1>JORNADA 17<br>CLAUSURA 2026</h1>
+    <div class="header-sub">Cierre de fase regular · Se define la Liguilla</div>
+    <div class="header-dates">Viernes 24 · Sábado 25 · Domingo 26 de Abril</div>
+    <div class="stakes-bar">
+      <span class="stake stake-liguilla">🏆 3 boletos en juego</span>
+      <span class="stake stake-ultimo">⚽ Último partido Mazatlán</span>
+      <span class="stake stake-millon">💰 Premio $1M en juego</span>
+    </div>
+  </div>
+
+  <div class="prog-wrap">
+    <div class="prog-track"><div class="prog-fill" id="pf"></div></div>
+    <span class="prog-lbl" id="pl">0/9 partidos elegidos</span>
+  </div>
+
+  <div class="name-sec">
+    <label class="lbl" for="nm">👤 Nombre del participante</label>
+    <input class="name-inp" id="nm" type="text" placeholder="¿Quién va a ganar esta quiniela?" oninput="upd()"/>
+  </div>
+
+  <div class="legend">
+    <span class="leg leg-l">🏠 L = Local</span>
+    <span class="leg leg-e">🤝 E = Empate</span>
+    <span class="leg leg-v">✈️ V = Visitante</span>
+  </div>
+
+  <div id="mc"></div>
+
+  <div class="sub-wrap">
+    <p class="sub-hint" id="sh">⚠️ Completa todos los picks para registrar</p>
+    <button class="sub-btn" id="sb" disabled onclick="doSubmit()">👑 REGISTRAR QUINIELA FINAL</button>
+  </div>
+  <div class="footer">Liga MX · Clausura 2026 · Jornada 17 · Última de Fase Regular</div>
+
+</div><!-- /frm -->
+
+<div id="suc">
+  <div class="suc-card">
+    <span class="trophy-big">🏆</span>
+    <div class="suc-title">¡Quiniela Lista!</div>
+    <div class="suc-sub" id="sn"></div>
+    <div class="res-grid" id="rg"></div>
+    <button class="rst-btn" onclick="doReset()">↩ Nueva Quiniela</button>
+  </div>
+  <div class="footer">Liga MX · Clausura 2026 · J17 · Última Jornada</div>
+</div>
+
+</div><!-- /wrap -->
+
+<script>
+const DAYS=[
+  {lbl:"VIERNES 24 DE ABRIL",ms:[
+    {id:1,l:"Puebla",lc:"#1a3c1a",lf:"🟢",v:"Querétaro",vc:"#1a1a3c",vf:"🔵",h:"21:00",tags:["libre"],note:null}
+  ]},
+  {lbl:"SÁBADO 25 DE ABRIL",ms:[
+    {id:2,l:"Pachuca",lc:"#1a1a3c",lf:"⬡",v:"Pumas",vc:"#2a1a00",vf:"🐾",h:"17:00",tags:["libre"],note:null},
+    {id:3,l:"Tigres",lc:"#2a1a00",lf:"🐯",v:"Mazatlán",vc:"#0a1a2a",vf:"⚓",h:"17:00",tags:["liguilla","ultimo"],note:"🚨 Último partido de Mazatlán en Liga MX"},
+    {id:4,l:"Toluca",lc:"#2a0808",lf:"😈",v:"León",vc:"#0a1a08",vf:"🦁",h:"19:00",tags:["liguilla","millon"],note:"León pelea liguilla"},
+    {id:5,l:"Chivas",lc:"#2a0808",lf:"🐐",v:"Tijuana",vc:"#000a1a",vf:"🐕",h:"19:07",tags:["liguilla"],note:"Tijuana pelea liguilla"},
+    {id:6,l:"Juárez",lc:"#1a1000",lf:"🦅",v:"San Luis",vc:"#1a0808",vf:"⚡",h:"21:00",tags:["libre"],note:null},
+    {id:7,l:"América",lc:"#1a1400",lf:"🦅",v:"Atlas",vc:"#1a0808",vf:"🦊",h:"21:00",tags:["liguilla"],note:"🔥 Ambos pelean por el último boleto"}
+  ]},
+  {lbl:"DOMINGO 26 DE ABRIL",ms:[
+    {id:8,l:"Santos",lc:"#081a08",lf:"💚",v:"Monterrey",vc:"#001a2a",vf:"⚽",h:"17:00",tags:["libre"],note:null},
+    {id:9,l:"Cruz Azul",lc:"#00081a",lf:"⚙️",v:"Necaxa",vc:"#1a0808",vf:"⚡",h:"19:00",tags:["millon"],note:"💰 Cruz Azul va por el millón de dólares"}
+  ]}
+];
+const ALL=DAYS.flatMap(d=>d.ms);
+const picks={};
+const LBLS={L:"Gana Local",E:"Empate",V:"Gana Visita"};
+const EMJS={L:"🏠",E:"🤝",V:"✈️"};
+const TAG_HTML={
+  liguilla:'<span class="ctag ctag-liguilla">🏆 Liguilla</span>',
+  ultimo:'<span class="ctag ctag-ultimo">⚽ Último partido</span>',
+  millon:'<span class="ctag ctag-millon">💰 Premio $1M</span>',
+  libre:'<span class="ctag ctag-libre">Jornada 17</span>'
+};
+const PTS={
+  "Chivas":"35 pts",  "Pumas":"33 pts","Pachuca":"31 pts","Cruz Azul":"30 pts",
+  "Toluca":"27 pts","Tigres":"~22 pts","América":"~25 pts","Atlas":"~22 pts",
+  "Tijuana":"~21 pts","León":"~22 pts","Monterrey":"~18 pts","Santos":"elim.",
+  "Mazatlán":"último partido","Puebla":"elim.","Querétaro":"elim.",
+  "Juárez":"elim.","San Luis":"elim.","Necaxa":"elim."
+};
+
+function build(){
+  const mc=document.getElementById('mc');
+  let idx=1;
+  DAYS.forEach(day=>{
+    const sep=document.createElement('div');sep.className='day-sep';
+    sep.innerHTML=`<div class="day-line"></div><div class="day-label">${day.lbl}</div><div class="day-line"></div>`;
+    mc.appendChild(sep);
+    const grp=document.createElement('div');grp.className='matches';
+    day.ms.forEach(m=>{
+      const tags=m.tags.map(t=>TAG_HTML[t]||'').join('');
+      const c=document.createElement('div');c.className='card';c.id='c'+m.id;
+      c.innerHTML=`
+        <div class="card-top">
+          <div class="card-tags">${tags}</div>
+          <span class="card-time">⏰ ${m.h}</span>
+        </div>
+        ${m.note?`<div style="font-size:10px;color:#c49a00;margin-bottom:8px;font-weight:700;letter-spacing:.5px">${m.note}</div>`:''}
+        <div class="teams">
+          <div class="team">
+            <div class="shield" style="background:${m.lc}22;border:1px solid ${m.lc}66"><span>${m.lf}</span></div>
+            <span class="team-name">${m.l}</span>
+            <span class="team-pts">${PTS[m.l]||''}</span>
+          </div>
+          <div class="vs-col">
+            <span class="vs-txt">VS</span>
+          </div>
+          <div class="team">
+            <div class="shield" style="background:${m.vc}22;border:1px solid ${m.vc}66"><span>${m.vf}</span></div>
+            <span class="team-name">${m.v}</span>
+            <span class="team-pts">${PTS[m.v]||''}</span>
+          </div>
+        </div>
+        <div class="picks">
+          <button class="pbtn" id="b${m.id}L" onclick="pick(${m.id},'L')">🏠 Local</button>
+          <button class="pbtn" id="b${m.id}E" onclick="pick(${m.id},'E')">🤝 Empate</button>
+          <button class="pbtn" id="b${m.id}V" onclick="pick(${m.id},'V')">✈️ Visita</button>
+        </div>`;
+      grp.appendChild(c);
+      idx++;
+    });
+    mc.appendChild(grp);
+  });
+}
+
+function pick(id,opt){
+  const prev=picks[id];
+  if(prev)document.getElementById('b'+id+prev).classList.remove('a'+prev);
+  picks[id]=opt;
+  document.getElementById('b'+id+opt).classList.add('a'+opt);
+  document.getElementById('c'+id).className='card p'+opt;
+  upd();
+}
+function upd(){
+  const nm=document.getElementById('nm').value.trim();
+  const cnt=Object.keys(picks).length;
+  document.getElementById('pf').style.width=(cnt/ALL.length*100)+'%';
+  document.getElementById('pl').textContent=cnt+'/'+ALL.length+' partidos elegidos';
+  const btn=document.getElementById('sb');
+  const hint=document.getElementById('sh');
+  if(!nm){hint.textContent='⚠️ Ingresa tu nombre';btn.disabled=true;}
+  else if(cnt<ALL.length){hint.textContent='⚠️ Faltan '+(ALL.length-cnt)+' partido'+(ALL.length-cnt!==1?'s':'');btn.disabled=true;}
+  else{hint.textContent='';btn.disabled=false;}
+}
+function doSubmit(){
+  const nm=document.getElementById('nm').value.trim();
+  document.getElementById('sn').textContent='¡Buena suerte, '+nm+'! 🤞 Que caiga la última jornada.';
+  const rg=document.getElementById('rg');rg.innerHTML='';
+  let idx=1;
+  ALL.forEach(m=>{
+    const p=picks[m.id];
+    const row=document.createElement('div');row.className='res-row';
+    row.innerHTML=`
+      <div class="res-left">
+        <span class="res-num">${idx++}</span>
+        <span class="res-teams">${m.l} — ${m.v}</span>
+      </div>
+      <span class="res-pick rp${p}">${EMJS[p]} ${LBLS[p]}</span>`;
+    rg.appendChild(row);
+  });
+  document.getElementById('frm').style.display='none';
+  document.getElementById('suc').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function doReset(){
+  Object.keys(picks).forEach(k=>delete picks[k]);
+  document.getElementById('nm').value='';
+  document.getElementById('mc').innerHTML='';
+  build();upd();
+  document.getElementById('suc').style.display='none';
+  document.getElementById('frm').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// Animated stars bg
+(function(){
+  const bg=document.getElementById('bgc');
+  for(let i=0;i<40;i++){
+    const s=document.createElement('div');s.className='bg-star';
+    s.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${2+Math.random()*4}s;--delay:${Math.random()*5}s`;
+    bg.appendChild(s);
+  }
+  ['bg-glow bg-glow-1','bg-glow bg-glow-2'].forEach(cls=>{
+    const g=document.createElement('div');g.className=cls;bg.appendChild(g);
+  });
+})();
+
+build();
+</script>
+</body>
+</html>
